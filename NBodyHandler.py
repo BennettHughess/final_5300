@@ -119,6 +119,52 @@ class NBodyHandler:
         H = T + U
         return H
 
+    def linear_momentum(self, fvec):
+        """
+        Computes the total linear momentum for a given flattened fvec.
+
+        Inputs:
+            fvec: a flattened vec -- see __init__ for what this means
+
+        Outputs:
+            P: the net momentum of the system (a 2-vector)
+        """
+        P = np.zeros(2)
+        for idx in range(0, self.N):
+            P += np.array([fvec[2*self.N + 2*idx],
+                           fvec[2*self.N + 2*idx+1]])
+
+        return P
+
+    def angular_momentum(self, fvec):
+        """
+        Computes the total angular momentum for a given flattened fvec.
+
+        Inputs:
+            fvec: a flattened vec -- see __init__ for what this means
+
+        Outputs:
+            L: the net angular momentum of the system
+        """
+        # compute linear momentum for each particle
+        momentum_arr = np.zeros((self.N, 2))
+        for idx in range(0, self.N):
+            momentum_arr[idx] = np.array([fvec[2*self.N + 2*idx],
+                                          fvec[2*self.N + 2*idx+1]])
+
+        # compute radius vector for each particle
+        r_arr = np.zeros((self.N, 2))
+        for idx in range(0, self.N):
+            r_arr[idx] = np.array([fvec[2*idx],
+                                   fvec[2*idx + 1]])
+
+        # compute total angular momentum
+        L = 0
+        for idx in range(0, self.N):
+            L += np.cross(r_arr[idx], momentum_arr[idx])
+
+        return L
+
     def euler(self, func, t_arr):
         """
         Implemented the Euler method for integrating motion.
@@ -289,6 +335,9 @@ class NBodyHandler:
         Additionally, this variable is set:
             self.sol: an OdeSolution object which returns an interpolated
                 solution -- only created when method=RK45
+            self.H: the hamiltonian of the system for each t
+            self.P: the linear momentum (2-vec) of the system for each t
+            self.L: the angular momentum of the system for each t
         """
 
         # pick an integrator
@@ -316,9 +365,13 @@ class NBodyHandler:
             print("Error: invalid integration method. defaulting to leapfrog.")
             self.t, self.vec = self.leapfrog(self.get_rhs, t_eval)
 
-        # compute hamiltonian for the solution
-        self.ham = np.zeros(len(t_eval))
+        # compute hamiltonian and momenta for the solution
+        self.H = np.zeros(len(t_eval))
+        self.P = np.zeros((2, len(t_eval)))
+        self.L = np.zeros(len(t_eval))
         for idx in range(0, len(t_eval)):
-            self.ham[idx] = self.hamiltonian(self.vec[:, idx])
+            self.H[idx] = self.hamiltonian(self.vec[:, idx])
+            self.P[:, idx] = self.linear_momentum(self.vec[:, idx])
+            self.L[idx] = self.angular_momentum(self.vec[:, idx])
 
         return self.t, self.vec
