@@ -66,11 +66,19 @@ The final is out of 300 points -- I'll explain where I believe I've met the requ
 ## Gallery
 These are just some pretty animations I generated.
 
-
-
 [video](https://github.com/user-attachments/assets/a6a344ab-ef6a-4c16-8c5a-72c00aac862f)
 
-
+[video](https://github.com/user-attachments/assets/8517aa46-9cdf-4466-afc2-ae100b4bbd83)
 
 These next animations are initialized with conditions from [this helpful website](https://observablehq.com/@rreusser/periodic-planar-three-body-orbits).
+
+[video](https://github.com/user-attachments/assets/21a2ac3d-2a84-45d1-9d00-9052a406945d)
+
+[video](https://github.com/user-attachments/assets/edb82690-16ec-41b4-aa16-e47458d9f571)
+
+[video](https://github.com/user-attachments/assets/858e9cbc-93f4-442c-b0d7-fb2862b3442f)
+
+
+
+
 
